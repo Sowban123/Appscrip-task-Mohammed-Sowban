@@ -19,7 +19,7 @@ export default function ProductListingPage({
 
   const [products] = useState<Product[]>(initialProducts);
 
-  // TEMP: bypass all filters
+  // Bypass filters completely for debugging
   const filteredAndSortedProducts = useMemo(() => {
     return products;
   }, [products]);
@@ -28,23 +28,25 @@ export default function ProductListingPage({
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
-        <h1 className="text-2xl font-bold mb-4">Debug Product List</h1>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold mb-6">Debug Product Listing</h1>
 
         {filteredAndSortedProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAndSortedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
-          <p className="text-red-600 text-lg">No products found</p>
+          <p className="text-red-600 text-lg font-semibold">
+            No products found
+          </p>
         )}
       </div>
     </div>
   );
 }
-
+  
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
