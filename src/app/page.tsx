@@ -1,10 +1,12 @@
 import ProductListingPage from "@/components/ProductListingPage";
 import { Product } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 async function getProducts(): Promise<Product[]> {
   try {
     const res = await fetch("https://fakestoreapi.com/products", {
-      next: { revalidate: 3600 },
+      cache: "no-store",
     });
 
     if (!res.ok) throw new Error("Failed to fetch products");
@@ -18,7 +20,7 @@ async function getProducts(): Promise<Product[]> {
 async function getCategories(): Promise<string[]> {
   try {
     const res = await fetch("https://fakestoreapi.com/products/categories", {
-      next: { revalidate: 3600 },
+      cache: "no-store",
     });
 
     if (!res.ok) throw new Error("Failed to fetch categories");
@@ -37,7 +39,7 @@ export default async function Home() {
 
   return (
     <main>
-      {/* Mandatory single H1 for SEO */}
+      {/* Single H1 for SEO */}
       <h1 className="sr-only">Product Listing Page</h1>
 
       <ProductListingPage
