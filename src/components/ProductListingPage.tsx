@@ -10,46 +10,52 @@ interface ProductListingPageProps {
   categories: string[];
 }
 
-export default function ProductListingPage({
-  initialProducts,
-  categories,
-}: ProductListingPageProps) {
-  console.log("SSR initialProducts:", initialProducts);
-  console.log("SSR initialProducts length:", initialProducts.length);
-
+export default function ProductListingPage({ initialProducts, categories }: ProductListingPageProps) {
   const [products] = useState<Product[]>(initialProducts);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState<string>('recommended');
+  const [showFilters, setShowFilters] = useState(false);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
 
-  // Bypass filters completely for debugging
   const filteredAndSortedProducts = useMemo(() => {
-    return products;
-  }, [products]);
+    let filtered = [...products];
 
-  console.log("CLIENT products length:", products.length);
+    // Filter by categories
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(product => 
+        selectedCategories.includes(product.category)
+      );
+    }
+
+    // Filter by price range
+    filtered = filtered.filter(product => 
+      product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
+
+    // Sort products
+    switch (sortBy) {
+      case 'price-low':
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case 'rating':
+        filtered.sort((a, b) => b.rating.rate - a.rating.rate);
+        break;
+      case 'newest':
+        filtered.sort((a, b) => b.id - a.id);
+        break;
+      default:
+        break;
+    }
+
+    return filtered;
+  }, [products, selectedCategories, sortBy, priceRange]);
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">Debug Product Listing</h1>
-
-        {filteredAndSortedProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredAndSortedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-red-600 text-lg font-semibold">
-            No products found
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}
-  
-  return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
+      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">"
       {/* Breadcrumb */}
       <nav className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6" aria-label="Breadcrumb">
         <ol className="flex items-center gap-2">
@@ -106,10 +112,10 @@ export default function ProductListingPage({
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content */}  
       <div className="flex gap-6 lg:gap-8">
         {/* Sidebar Filters - Desktop */}
-        <aside className="hidden lg:block w-64 xl:w-72 shrink-0">
+        <aside className="hidden lg:block w-64 xl:w-72 flex-shrink-0">
           <div className="bg-white rounded-lg border border-gray-200 p-5 lg:p-6 sticky top-24">
             <FilterSidebar
               categories={categories}
@@ -172,7 +178,7 @@ export default function ProductListingPage({
             </div>
           ) : (
             <div className="text-center py-12 sm:py-16 px-4">
-              <div className="mb-4">  
+              <div className="mb-4">
                 <svg className="w-16 h-16 sm:w-20 sm:h-20 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
