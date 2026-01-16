@@ -55,7 +55,7 @@ export default function ProductListingPage({ initialProducts, categories }: Prod
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">"
+      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
       {/* Breadcrumb */}
       <nav className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6" aria-label="Breadcrumb">
         <ol className="flex items-center gap-2">
