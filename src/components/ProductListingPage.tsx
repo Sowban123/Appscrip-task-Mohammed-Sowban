@@ -1,9 +1,12 @@
 'use client';
 
+
 import { useState, useMemo } from 'react';
 import { Product } from '@/types';
 import ProductCard from './ProductCard';
 import FilterSidebar from './FilterSidebar';
+
+
 
 interface ProductListingPageProps {
   initialProducts: Product[];
@@ -17,41 +20,10 @@ export default function ProductListingPage({ initialProducts, categories }: Prod
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
 
-  const filteredAndSortedProducts = useMemo(() => {
-    let filtered = [...products];
+const filteredAndSortedProducts = useMemo(() => {
+  return products;
+}, [products]);
 
-    // Filter by categories
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter(product => 
-        selectedCategories.includes(product.category)
-      );
-    }
-
-    // Filter by price range
-    filtered = filtered.filter(product => 
-      product.price >= priceRange[0] && product.price <= priceRange[1]
-    );
-
-    // Sort products
-    switch (sortBy) {
-      case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case 'rating':
-        filtered.sort((a, b) => b.rating.rate - a.rating.rate);
-        break;
-      case 'newest':
-        filtered.sort((a, b) => b.id - a.id);
-        break;
-      default:
-        break;
-    }
-
-    return filtered;
-  }, [products, selectedCategories, sortBy, priceRange]);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -178,7 +150,7 @@ export default function ProductListingPage({ initialProducts, categories }: Prod
             </div>
           ) : (
             <div className="text-center py-12 sm:py-16 px-4">
-              <div className="mb-4">
+              <div className="mb-4">  
                 <svg className="w-16 h-16 sm:w-20 sm:h-20 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
